@@ -1,0 +1,88 @@
+#include <iostream>
+#include <string>
+//#include <sstream>
+//#include <cmath>
+#include <stack>
+
+//Goal:
+// - create a CLI calcu that can calculate any mathematical problem
+// with infinite amount of a user inputs (e.g. 2+2(4/5) or 2^3)
+
+/* - user types input
+     - getline stores it as a string
+         - tokenizer reads it character by character
+             - evaluator applies math rules
+                 - result prints to screen */
+
+using namespace std;
+
+string input_op() {
+    //put all basic arithmetic function and rules
+    string math_op;
+    
+    cout << ">> "; 
+    getline(cin, math_op);
+    return math_op;
+}
+
+double apply_op(double a, double b, char op) {
+    if (op == '+') return a + b;
+    if (op == '-') return a - b;
+    if (op == '*') return a * b;
+    if (op == '/') return a / b;
+    return 0;
+}
+
+int precendence(char op) {
+    if (op == '+' || op == '-') return 1;
+    if (op == '*' || op == '/') return 2;
+    return 0;
+}
+
+double eval_op(string expression) {
+    //reference input_op and evaluate
+
+    stack<double> values;
+    stack<char> ops;
+    
+    for (size_t i = 0; i < expression.length(); i++) {
+        char c = expression[i];
+        // c is now one character at a time
+        
+        if (isdigit(c)) {
+            string num = "";
+            while (i < expression.length() && isdigit(expression[i])) {
+                num += expression[i];
+                i++;
+            }
+            double value = stod(num);
+            values.push(value);
+        }
+        else if (c == '+'  || c == '-') {
+            ops.push(c);
+        }
+        else if (c == '*'  || c == '/') {
+            ops.push(c);
+        }
+        else if (c == '(') {
+            ops.push(c);
+        }
+        else if (c == ')') {
+            double b = values.top(); values.pop();
+            double a = values.top(); values.pop();
+        }
+        else if (isspace(c)) {
+            
+        }
+    }
+    
+    return 0;
+}
+
+int main () {
+    string result = input_op();
+    double answer = eval_op(result);
+    cout << answer;
+
+    return answer;
+}
